@@ -73,13 +73,19 @@ function selectTab(tabId) {
     $('#tab-bar button').removeClass('selected');
     console.log('Changing to tab', tabId);
     $(tabId).addClass('selected');
+    listChannels();
 }
 
 /**
  * toggle (show/hide) the emojis menu
  */
+
 function toggleEmojis() {
-    $('#emojis').toggle(); // #toggle
+    /*#add # adding all standard emojis by kikobeats github to the emoji button */ 
+    var emojis = require('emojis-list');
+    console.log(emojis);
+    $('#chat-bar div').append(emojis);
+    $('#emojis').toggle(); // #toggle   
 }
 
 /**
@@ -107,6 +113,16 @@ function sendMessage() {
 
     // #8 let's now use the real message #input
     var message = new Message($('#message').val());
+    
+    // blocking empty mesages from sending
+    if (message.text.length == 0) {
+        alert("ERROR!!! Enter message");
+        return false;
+    }
+    else {
+        alert("Message sent");
+        return true;  
+    }
     console.log("New message:", message);
 
     // #8 convenient message append with jQuery:
@@ -118,6 +134,7 @@ function sendMessage() {
 
     // #8 clear the message input
     $('#message').val('');
+    
 }
 
 /**
@@ -133,6 +150,7 @@ function createMessageElement(messageObject) {
     return '<div class="message'+
         //this dynamically adds the class 'own' (#own) to the #message, based on the
         //ternary operator. We need () in order to not disrupt the return.
+        // #acc
         (messageObject.own ? ' own' : '') +
         '">' +
         '<h3><a href="http://w3w.co/' + messageObject.createdBy + '" target="_blank">'+
@@ -140,22 +158,57 @@ function createMessageElement(messageObject) {
         messageObject.createdOn.toLocaleString() +
         '<em>' + expiresIn+ ' min. left</em></h3>' +
         '<p>' + messageObject.text + '</p>' +
-        '<button>+5 min.</button>' +
+        '<button class="btn btn-accent">+5 min.</button>' +
         '</div>';
 }
 
 
-function listChannels() {
+/* #arr an array of channels */
+var channels = [yummy, sevencontinents, killerapp, 
+    firstpersononmars, octoberfest];
+
+function listChannels(criterion) {
     // #8 channel onload
     //$('#channels ul').append("<li>New Channel</li>")
 
     // #8 five new channels
-    $('#channels ul').append(createChannelElement(yummy));
-    $('#channels ul').append(createChannelElement(sevencontinents));
-    $('#channels ul').append(createChannelElement(killerapp));
-    $('#channels ul').append(createChannelElement(firstpersononmars));
-    $('#channels ul').append(createChannelElement(octoberfest));
+    // $('#channels ul').append(createChannelElement(yummy));
+    // $('#channels ul').append(createChannelElement(sevencontinents));
+    // $('#channels ul').append(createChannelElement(killerapp));
+    // $('#channels ul').append(createChannelElement(firstpersononmars));
+    // $('#channels ul').append(createChannelElement(octoberfest));
+
+   
+
+    // #duplicate preventing the tab buttons from duplicating channels
+    $('#channels ul').empty();
+
+    // using for loop to append all channels to channels list
+    for (i = 0; i < channels.length; i++) {
+        channels.reverse(criterion);
+        channels.sort(criterion); 
+        channels.reverse(criterion);
+        $('#channels ul').append(createChannelElement(channels[i]));
+    }   
+} 
+
+// #compare #sorting channels by new in descending order
+function newChannel(a, b) {
+    return (a.createdOn - b.createdOn);
 }
+
+// #compare #sorting channels by trending in descending order
+function trendChannel(a, b) {
+    return (a.messageCount - b.messageCount);
+}
+
+// #compare #sorting channels by favorites in descending order
+function favoriteChannel(a, b) {
+    return (a.starred - b.starred);
+}
+
+
+
 
 /**
  * #8 This function makes a new jQuery #channel <li> element out of a given object
