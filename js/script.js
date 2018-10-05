@@ -48,6 +48,12 @@ function switchChannel(channelObject) {
 
     /* #7 store selected channel in global variable */
     currentChannel = channelObject;
+
+    // #push pushing message object into currentChannel
+    channelObject.push(messages);
+    for (i=0; i < messages.length; i++ ) {
+        channelObject.messageCount = messages[i];
+    } 
 }
 
 /* liking a channel on #click */
@@ -114,15 +120,12 @@ function sendMessage() {
     // #8 let's now use the real message #input
     var message = new Message($('#message').val());
     
-    // blocking empty mesages from sending
+    // blocking empty messages from sending
     if (message.text.length == 0) {
         alert("ERROR!!! Enter message");
         return false;
-    }
-    else {
-        alert("Message sent");
-        return true;  
-    }
+    }  
+    
     console.log("New message:", message);
 
     // #8 convenient message append with jQuery:
@@ -134,7 +137,6 @@ function sendMessage() {
 
     // #8 clear the message input
     $('#message').val('');
-    
 }
 
 /**
@@ -245,4 +247,22 @@ function createChannelElement(channelObject) {
 
     // return the complete channel
     return channel;
+}
+
+function createChannel() {
+    var createC = $('#chat h1').html('<div id = "create-channel"> <input size = "40" type="text" placeholder="Enter a #Channel Name..."' + 
+    'maxlength="140" id="enter-channel">' + '<span id = "close-channel" onclick = "abortChannel()"> Abort<i class="far fa-window-close"></i></span></div>');
+   
+    
+    $('#for-chat-buttons').html('<button onclick="submitChannel()" class="btn btn-accent" id="send-channel" >Create</button>');
+    $('#send-button').hide();
+    $('#messages').hide();
+}
+
+function abortChannel() {
+    $('#send-channel').hide();  
+    $('#send-button button').show(); 
+    $('#messages').show();
+    $('.md-whiteframe-4dp').show();
+    
 }

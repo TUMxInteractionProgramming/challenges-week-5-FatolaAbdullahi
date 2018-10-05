@@ -95,7 +95,7 @@
        
     </ul>
     <!-- #btn drawing a round button -->
-    <span class="dot"> <i class="fas fa-plus"></i> </span>
+    <span class="dot" onclick="createChannel()"> <i class="fas fa-plus"></i> </span>
 
     <!-- TAB BAR -->
     <div id="tab-bar">
@@ -188,7 +188,7 @@
                It also gets an id -->
         <input type="text" placeholder="Message..." maxlength="140" id="message">
         <!-- #8 send message requires a button #send button as accent button -->
-        <button onclick="sendMessage()" class="btn btn-accent" id="send-button" ><i class="fas fa-arrow-right"></i></button>
+        <div id="for-chat-buttons"> <button onclick="sendMessage()" class="btn btn-accent" id="send-button" ><i class="fas fa-arrow-right"></i></button> </div>
     </div>
 </div>
 
