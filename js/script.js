@@ -250,6 +250,7 @@ function createChannelElement(channelObject) {
 }
 
 function createChannel() {
+    /* create new channel */
     var createC = $('#chat h1').html('<div id = "create-channel"> <input size = "40" type="text" placeholder="Enter a #Channel Name..."' + 
     'maxlength="140" id="enter-channel">' + '<span id = "close-channel" onclick = "abortChannel()"> Abort<i class="far fa-window-close"></i></span></div>');
    
@@ -260,9 +261,42 @@ function createChannel() {
 }
 
 function abortChannel() {
-    $('#send-channel').hide();  
-    $('#send-button button').show(); 
-    $('#messages').show();
-    $('.md-whiteframe-4dp').show();
+    /* aborting channel */
+    $(".md-whiteframe-4dp h1").html('<h1 class= "md-whiteframe-4dp">'
+    + '<span id="channel-name">' + currentChannel + '</span>'
+    + '<small id="channel-location">by <strong>' + currentLocation + '</strong>'
+    + '</small><i class="fas fa-star" onclick="star()"></i></h1>');
+
+    $('#for-chat-buttons').html('<button onclick="sendMessage()" class="btn btn-accent" id="send-button" ><i class="fas fa-arrow-right"></i></button>');
+    $('#send-channel').hide(); 
     
+}
+
+    
+function submitChannel() {
+
+var channelCreate = new Message($('#enter-channel').val());
+
+// blocking empty messages from sending
+if (channelCreate.text.length == 0) {
+    alert("ERROR!!! Enter channel name starting with #");
+    return false;
+} else if (channelCreate.text !== channelCreate.text.startsWith("#")) {
+    alert("ERROR!!! start with #");
+    return false;
+}
+
+
+
+
+
+console.log("New message:", channelCreate);
+
+
+// #8 messages will scroll to a certain point if we apply a certain height, in this case the overall scrollHeight of the messages-div that increases with every message;
+// it would also scroll to the bottom when using a very high number (e.g. 1000000000);
+$('#messages').scrollTop($('#messages').prop('scrollHeight'));
+
+// #8 clear the message input
+$('#message').val('');
 }
